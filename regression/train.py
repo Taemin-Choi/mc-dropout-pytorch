@@ -4,10 +4,11 @@ import os
 import argparse
 import torch
 import torch.nn as nn
-from torch.autograd import Variable
 import numpy as np
 import matplotlib.pyplot as plt
 
+import dataset
+import net
 
 
 # categories = ['line', 'curve', 'circle']
@@ -77,10 +78,10 @@ import matplotlib.pyplot as plt
 # ax.scatter(x_test, y_test, c='r')
 # plt.show()
 
-class Trainer(object):
+class RegressionTrainer(object):
     """
     """
-    def __init__(self):
+    def __init__(self, shape):
         torch.cuda.is_available()
         # print("GPU {}".format(use_gpu))
         # print("GPU count {}".format(torch.cuda.device_count()))
@@ -90,20 +91,43 @@ class Trainer(object):
         # For reproducivility
         torch.manual_seed(777)
 
+        x_train, y_train, x_test = dataset.load_dataset(shape)
 
-    def load_data(self, shape):
-        if shape == 'line':
-            
-    def load_model(self, model):
-        pass
-    def train(self):
-        pass
+        self.X = torch.Tensor(x_train)
+        self.Y = torch.Tensor(y_train)
+        self.X_test = torch.Tensor(x_test)
+
+        self.model = net.load_model('simple')
+
+    def train(self, learning_rate, epoch):
+        # cost criterion
+        criterion = nn.MSELoss()
+
+        # Minimize
+        optimizer = torch.optim.SGD(self.model.parameters(), lr=learning_rate)
+
+        # Train the model
+        self.model.train()
+        for step in range(epoch):
+            optimizer.zero_grad()
+            # Our hypothesis
+            hypothesis = self.model(self.X)
+            cost = criterion(hypothesis, self.Y)
+            cost.backward()
+            optimizer.step()
+
+            if step % 100 == 0:
+                print(step, cost.data.numpy())
+
+    def 
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--shape', default='line', type=str)
     args = parser.parse_args()
 
-    trainer = Trainer()
+    regression_trainer = RegressionTrainer(args.shape)
+    regression_trainer.train(0.01, 1000)
     # print(args.shape)
 
 
