@@ -8,14 +8,7 @@ from torch.autograd import Variable
 import numpy as np
 import matplotlib.pyplot as plt
 
-use_gpu = torch.cuda.is_available()
-print("GPU {}".format(use_gpu))
-print("GPU count {}".format(torch.cuda.device_count()))
-device_index =torch.cuda.current_device()
-print("Using {}".format(torch.cuda.get_device_name(device_index)))
 
-# For reproducivility
-torch.manual_seed(777)
 
 # categories = ['line', 'curve', 'circle']
 
@@ -88,16 +81,30 @@ class Trainer(object):
     """
     """
     def __init__(self):
+        torch.cuda.is_available()
+        # print("GPU {}".format(use_gpu))
+        # print("GPU count {}".format(torch.cuda.device_count()))
+        device_index =torch.cuda.current_device()
+        print("Using {}".format(torch.cuda.get_device_name(device_index)))
+
+        # For reproducivility
+        torch.manual_seed(777)
+
+
+    def load_data(self, shape):
+        if shape == 'line':
+            
+    def load_model(self, model):
         pass
     def train(self):
         pass
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--shape', default="line", type=str)
+    parser.add_argument('--shape', default='line', type=str)
     args = parser.parse_args()
 
     trainer = Trainer()
-    print(args.shape)
+    # print(args.shape)
 
 
 
