@@ -52,7 +52,7 @@ class RegressionTrainer(object):
             if step % 100 == 0:
                 print(step, cost.data.numpy())
 
-        save_name = str(self.shape) + '.pth' 
+        save_name = './weights/' + str(self.shape) + '.pth' 
         torch.save(self.model.state_dict(), save_name)
 
     def eval(self):

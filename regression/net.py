@@ -11,7 +11,6 @@ def load_model(deep='simple'):
                               nn.Linear(100, 100, bias=True),
                               nn.LeakyReLU(0.1),
                               nn.Dropout(0.3),
-                              nn.Linear(100, 1, bias=True),
-                              )
+                              nn.Linear(100, 1, bias=True))
 
-        return model
+    return model
